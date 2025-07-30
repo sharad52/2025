@@ -1,1 +1,80 @@
 A class should have only one reason to change meaning it should have a single responsibility or purpose.
+
+In Violation example, the UserManager class has four different responsibilities
+ => Managing user data
+ => Sending emails
+ => Database operations
+ => Generating reports
+
+This creates problems because changes to email formatting, database schema, or reporting requirements would all required modifying the same class.
+
+
+***In the SRP-compliant version***, each class has a single, well-defined responsibility:
+ User: Represents user data
+ UserRepository: Handles data persistence
+ EmailService: Message email operations
+ UserReportGenerator: Creates reports
+ UserService: Coordinates the user registration workflow.
+
+ Benefits of following SRP:
+  Easier maintenance: changes to email logic only affect EmailService
+  Better testability: Each class can be tested independently
+  Improved resuability: EmailService ca be used for other email needs
+  Reducing coupling: Classes depend on abstractions, no concrete implementations
+  Clearer code organization: Each class has a clear, focused purpose.
+
+  This separation makes the code more modular, maintainable, and follows the principle that each class should have exactly one reason to change.
+
+
+
+*******Disadvantages of Following SRP (Single Responsibility Principle):******
+1. Increased Complexity
+
+More classes to manage: What was 1 class becomes 5+ classes
+Complex object graphs: You need to wire together multiple dependencies
+Harder to understand initially: New developers must understand how all pieces fit together
+
+2. Over-Engineering Small Projects
+For simple applications, SRP can be overkill:
+python# Simple need: Store user and send email
+# SRP approach: Create 5 classes, manage dependencies
+# Reality: The simple violation might be perfectly adequate
+3. Performance Overhead
+
+More object creation: Each responsibility becomes a separate object
+Additional method calls: Simple operations now involve multiple classes
+Memory usage: More objects in memory vs. one consolidated class
+
+4. Increased Development Time
+
+More boilerplate code: Interfaces, dependency injection, setup
+Design decisions: Deciding where each responsibility belongs
+Testing overhead: More classes mean more unit tests to write
+
+5. Dependency Management Issues
+
+Circular dependencies: Classes might end up depending on each other
+Tight coupling: Despite separation, classes still need to work together
+Configuration complexity: Managing all the dependencies and their relationships
+
+6. Premature Abstraction
+
+YAGNI violation: "You Aren't Gonna Need It" - creating abstractions for changes that may never come
+Harder to change: Sometimes having everything in one place makes refactoring easier
+Analysis paralysis: Spending too much time deciding how to split responsibilities
+
+7. Context Switching Overhead
+
+Mental load: Developers must keep track of multiple classes for one feature
+Navigation complexity: Jumping between files to understand a single workflow
+Debugging difficulty: Tracing through multiple classes for simple operations
+
+When SRP Might Be Overkill:
+
+Small, stable applications that rarely change
+Prototype or proof-of-concept code
+Simple CRUD operations with no complex business logic
+One-time scripts or utilities
+Very small teams where code complexity isn't a major concern
+
+The key is finding the right balance - apply SRP when the benefits (maintainability, testability, reusability) outweigh the costs (complexity, development time, performance). For simple projects, a pragmatic approach that violates SRP might be more appropriate.RetryClaude does not have the ability to run the code it generates yet.Claude can make mistakes. Please double-check responses.
