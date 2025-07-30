@@ -1,0 +1,2 @@
+Senior-Level Insight:
+OCP is powerful but can lead to overengineering if applied prematurely. For instance, using the Strategy pattern for a feature unlikely to change adds unnecessary complexity. Senior engineers should assess the likelihood of extension needs using domain knowledge and prioritize YAGNI (You Aren’t Gonna Need It) when appropriate. In Python, dynamic typing and duck typing can simplify OCP adherence without heavy interfaces.
