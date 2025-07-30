@@ -1,0 +1,2 @@
+Open/Close principle
+"""Software entities(classes, modules, functions) should be open for extension but closed for modification, meaning you should be able to add new functionality without changing existing, tested code."

@@ -1,0 +1,2 @@
+Senior-Level Insight:
+SRP is often misunderstood as “one function per class.” Instead, it’s about cohesive responsibilities. Overapplying SRP can lead to fragmentation, where classes become too fine-grained, making the system harder to navigate. Balance SRP with the project’s scale and team expertise. For example, in microservices, SRP aligns well with bounded contexts but can be overkill in a monolithic script.
