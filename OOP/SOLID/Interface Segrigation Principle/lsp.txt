@@ -1,0 +1,6 @@
+No client should be forced on methods it doesn't use.
+            OR,
+Client should not be forced to depend on interfaces they do not use.
+
+It advocates for creating small, focused interfaces rather than large monolithic one.
+This principle helps prevent "fat" interfaces that force implementing classes to provide empty or meaningless implementations.

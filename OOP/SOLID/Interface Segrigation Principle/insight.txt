@@ -1,0 +1,2 @@
+Senior-Level Insight:
+In Python, interfaces are often implicit (via duck typing), so ISP is about ensuring classes don’t impose unnecessary methods. Overapplying ISP can lead to interface explosion, where managing many small interfaces becomes burdensome. Senior engineers should use Python’s typing.Protocol or abstract base classes (ABCs) judiciously and balance ISP with practical needs, especially in dynamic, loosely-coupled systems
