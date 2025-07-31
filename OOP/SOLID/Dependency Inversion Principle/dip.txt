@@ -1,0 +1,25 @@
+High level modules should not depend on low level modules: both should be depend on abstractions.
+Abstractions should not depend on details; details shoud depend on abstractions.
+
+
+Pros:
+
+Flexibility: Makes systems easier to extend or swap components (e.g., databases).
+Testability: Abstractions enable mocking and unit testing.
+Decoupling: Reduces tight coupling between modules.
+
+Cons:
+
+Complexity: Introduces abstractions that may be unnecessary for simple systems.
+Learning Curve: Requires understanding of dependency injection and inversion of control.
+
+When to Use:
+
+In systems requiring pluggable or swappable components (e.g., database backends).
+In large-scale applications where testability and modularity are critical.
+When building frameworks or libraries with replaceable dependencies.
+
+When Not to Use:
+
+In simple scripts or applications with fixed dependencies.
+In early prototypes where flexibility is not a priority.

@@ -1,0 +1,2 @@
+Senior-Level Insight:
+DIP is often paired with dependency injection (DI) in Python, using tools like dependency_injector or manual DI. Overapplying DIP can lead to over-abstraction, where simple dependencies are wrapped in unnecessary interfaces. Senior engineers should evaluate the trade-off between decoupling and simplicity, using Python’s dynamic nature to avoid boilerplate abstractions when possible. For example, simple configuration-based dependency selection may suffice in smaller systems.
