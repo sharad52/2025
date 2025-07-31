@@ -1,0 +1,2 @@
+Senior-Level Insight:
+LSP violations often stem from misusing inheritance instead of composition. In Python, where duck typing is prevalent, LSP is less about strict type hierarchies and more about behavioral compatibility. Senior engineers should favor composition over inheritance and use type hints or protocols (e.g., typing.Protocol) to enforce LSP in Python’s dynamic environment. Misapplying LSP can lead to rigid designs that hinder flexibility.

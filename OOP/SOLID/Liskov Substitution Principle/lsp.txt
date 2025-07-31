@@ -1,0 +1,24 @@
+The Object's of superclass should be replaceable with object's of subclass without breaking the application's functionality.
+if S is subtype of T then objects of type T can be replaced with objects of type S without altering the correctness of program.
+
+Pros:
+
+Reliability: Ensures subclasses behave as expected, maintaining system integrity.
+Interoperability: Enables polymorphic behavior in frameworks and libraries.
+Maintainability: Reduces bugs from unexpected subclass behavior.
+
+Cons:
+
+Design Complexity: Requires careful modeling of inheritance hierarchies.
+Limited Flexibility: Restricts certain subclass implementations, potentially forcing workarounds.
+
+When to Use:
+
+When designing inheritance hierarchies or polymorphic systems.
+In frameworks where subclasses are provided by external developers (e.g., plugin systems).
+When ensuring type safety in strongly-typed designs (less critical in Python due to dynamic typing).
+
+When Not to Use:
+
+In simple applications where inheritance is minimal or unnecessary.
+When composition (e.g., using mixins or delegation) is a simpler alternative.
