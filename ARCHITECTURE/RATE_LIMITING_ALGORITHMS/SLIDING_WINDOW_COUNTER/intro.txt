@@ -1,0 +1,4 @@
+Idea: Maintain two fixed windows (current and previous) and weight them. Approximates sliding window but cheaper.
+Pros: Near-accurate, less Memory
+cons: Still an approximation; more complex than fixed window
+When: Good tradeoff for production where slight approximation is acceptable.
