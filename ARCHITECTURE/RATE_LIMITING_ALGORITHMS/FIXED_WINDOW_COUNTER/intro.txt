@@ -1,0 +1,6 @@
+idea: Keep a counter per key for the current time window(e.g., per minute). Allow N requests per window.
+
+pros: Simple, Cheap
+Cons: Bursty at window boundries(two near-boundary windows allow 2N requests in short time)
+
+when: Good for Simple limits in dev or soft quotas
