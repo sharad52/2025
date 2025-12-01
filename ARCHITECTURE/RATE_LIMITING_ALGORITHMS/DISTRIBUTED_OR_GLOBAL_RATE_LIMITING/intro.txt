@@ -1,0 +1,2 @@
+Idea: Same algorithms but need coordination across multiple app instances. Usually done via Redis(INCR + TTL), Redis sorted sets, or a dedicated rate-limiting service.
+Pros/Cons: Adds complexity - need atomic ops, latency to central stroe.
