@@ -3,14 +3,16 @@ Redis PubSub FastAPI application
 """
 import json
 import asyncio
+from fastapi.routing import Lifespan
 import uvicorn
 import redis.asyncio as redis
 from typing import List
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
+from contextlib import asynccontextmanager
 
 
-app = FastAPI()
+app = FastAPI(lifespan=Lifespan)
 
 
 # Redis configuration
@@ -61,3 +63,166 @@ class ConnectionManager:
 
 
 manager = ConnectionManager()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Start Redis listner on startup"""
+    asyncio.create_task(manager.listen_to_redis)
+
+
+@app.get("/")
+async def get():
+    """Serve HTML test interface"""
+    html_content = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>WebSocket Redis Chat</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 800px;
+                margin: 50px auto;
+                padding: 20px;
+            }
+            #messages {
+                border: 1px solid #ccc;
+                height: 400px;
+                overflow-y: scroll;
+                padding: 10px;
+                margin-bottom: 10px;
+                background-color: #f9f9f9;
+            }
+            .message {
+                padding: 8px;
+                margin: 5px 0;
+                border-radius: 5px;
+                background-color: #e3f2fd;
+            }
+            .system {
+                background-color: #fff3cd;
+                font-style: italic;
+            }
+            input[type="text"] {
+                width: 70%;
+                padding: 10px;
+                font-size: 16px;
+            }
+            button {
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 4px;
+            }
+            button:hover {
+                background-color: #45a049;
+            }
+            #status {
+                padding: 10px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+            }
+            .connected {
+                background-color: #d4edda;
+                color: #155724;
+            }
+            .disconnected {
+                background-color: #f8d7da;
+                color: #721c24;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>WebSocket + Redis Pub/Sub Chat</h1>
+        <div id="status" class="disconnected">Disconnected</div>
+        <div id="messages"></div>
+        <input type="text" id="messageInput" placeholder="Type your message..." />
+        <button onclick="sendMessage()">Send</button>
+        
+        <script>
+            let ws;
+            const messagesDiv = document.getElementById('messages');
+            const messageInput = document.getElementById('messageInput');
+            const statusDiv = document.getElementById('status');
+            
+            function connect() {
+                ws = new WebSocket("ws://localhost:8000/ws");
+                
+                ws.onopen = function(event) {
+                    statusDiv.textContent = "Connected";
+                    statusDiv.className = "connected";
+                    addMessage("Connected to server", true);
+                };
+                
+                ws.onmessage = function(event) {
+                    addMessage(event.data, false);
+                };
+                
+                ws.onclose = function(event) {
+                    statusDiv.textContent = "Disconnected";
+                    statusDiv.className = "disconnected";
+                    addMessage("Disconnected from server", true);
+                    // Reconnect after 3 seconds
+                    setTimeout(connect, 3000);
+                };
+                
+                ws.onerror = function(error) {
+                    console.error("WebSocket error:", error);
+                };
+            }
+            
+            function addMessage(message, isSystem = false) {
+                const messageElement = document.createElement('div');
+                messageElement.className = isSystem ? 'message system' : 'message';
+                messageElement.textContent = message;
+                messagesDiv.appendChild(messageElement);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+            
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                if (message && ws.readyState === WebSocket.OPEN) {
+                    ws.send(message);
+                    messageInput.value = '';
+                }
+            }
+            
+            messageInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Connect on page load
+            connect();
+        </script>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
+
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while True:
+            # Receive message from WebSocket client
+            data = await websocket.receive_text()
+
+            # Create message with timestamp
+            message = f"[{websocket.client.host}]: {data}"
+
+            #publish to Redis (which will broadcast to all clients)
+            await manager.broadcast(message)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+        await manager.broadcast(f"Client {websocket.client.host} disconnected")
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+    
