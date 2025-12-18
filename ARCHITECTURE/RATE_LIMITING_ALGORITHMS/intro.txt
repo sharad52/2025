@@ -1,0 +1,4 @@
+Idea: Tokens are added to a bucket at a steady rate R up to capicity B. Each requests consumes a token. Allows bursts upto B.
+Pros: Natural support for steady rate + bursts. Popular and intuitive
+Cons: Requires careful, atomic bookkeeping in distributed settings.
+When: For smoothing traffic with bursts, e.g. per-user API througthput.

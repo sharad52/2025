@@ -1,0 +1,5 @@
+idea: store timestamps of each requests(e.g. in a list or sorted set). Count # requests in the last window period.
+
+Pros: Accurate, correct handling of bursts relative to the last X seconds.
+Cons: Memory heavy for high RPS unless you garbage collect; higher read/write costs.
+When: When accuracy is required and requests volume per key is modest.

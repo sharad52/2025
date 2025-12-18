@@ -1,0 +1,5 @@
+Idea: Requests enter a queueu; they are processed at a fixed rate; excess causes queueing or dropping.
+Pros: Enforces steady output rate.
+Cons: Can introduce latency; less natural for "allow N per minutes" semantics.
+When: When you want bounded outgoing requests rate(e.g. to an upstream service).
+
